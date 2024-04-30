@@ -8,7 +8,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 public interface TicketApi {
 
     @POST
-    @Path("employee")
+    @Path("ticket")
     void createTicket(Employee employee);
 
 }

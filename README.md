@@ -21,7 +21,7 @@ public interface EmployeeApi {
 
     @POST
     @Path("employee")
-    void addEmployee(Employee employee);
+    Employee addEmployee(Employee employee);
 
 }
 ```
@@ -42,7 +42,8 @@ public class EmployeeApiMock implements EmployeeApi {
     }
 
     @Override
-    public void addEmployee(Employee employee) {
+    public Employee addEmployee(Employee employee) {
+        return employee;
     }
 
 }
@@ -50,7 +51,7 @@ public class EmployeeApiMock implements EmployeeApi {
 
 Note that when using the mock annotation, your mock implementation wil override the rest client in all the tests, unless they specifically inject their own mocked version.
 If you want your mock to behave differently based on its input parameters, you would have to implement logic for that in the mock, which provides more complexity to the test,
-and most importantly that logic affects your test, but is not located in the test it self, making it harder for someone reading your test to understand what is going on.
+and most importantly that logic affects your test, but is not located in the test itself, making it harder for someone reading your test to understand what is going on.
 
 Now if we have a method in an EmployeeService class that we want to test:
 ```
@@ -74,6 +75,7 @@ public class EmployeeService {
 
 We could write some tests like this, and it would test that the NotFoundException given by employeeNumber "404" would result in an empty result.
 But why the employee number of "404" should differ from the "1" might not be immediately clear for readers, as this information is contained in the EmployeeApiMock class. 
+What we are really trying to test here is that an exception results in an Optional.empty() returned.
 
 ```
 @QuarkusTest
@@ -100,7 +102,8 @@ class GetEmployeeUsingMockClassTest {
 ## @InjectMock
 
 Quarkus allows us to define the mock implementation per test. Instead of creating a separate mock implementation class, we define the mock inside the test class.
-We use argument matchers to define logic based on input parameters. Our mock class and test can both be replaced by the following test.
+Quarkus documentation refers to the above method as the old approach, while this method is described as the new approach.
+Additionally, we use argument matchers to define logic based on input parameters. Our mock class and test can both be replaced by the following test.
 
 ```
 @QuarkusTest
@@ -135,7 +138,9 @@ public class GetEmployeeUsingInjectMockTest {
 ```
 
 This setup provides the same result, but with the mock setup inside the test class itself. 
-A big benefit of this is that whoever reads the tests can easily see what data is mocked. Using argument matchers allows for customizing the mock based on the parameters. More information about the powers of argument matchers can be found here: https://www.baeldung.com/mockito-argument-matchers
+A big benefit of this is that whoever reads the tests can easily see what data is mocked. 
+Using argument matchers allows for customizing the mock based on the parameters. 
+More information about the powers of argument matchers can be found here: https://www.baeldung.com/mockito-argument-matchers
 
 ## Verify
 

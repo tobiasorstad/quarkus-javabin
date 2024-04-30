@@ -1,9 +1,11 @@
-package org.example;
+package org.example.mock;
 
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.NotFoundException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.example.Employee;
+import org.example.EmployeeApi;
 
 @Mock
 @ApplicationScoped
@@ -20,7 +22,7 @@ public class EmployeeApiMock implements EmployeeApi {
 
     @Override
     public Employee addEmployee(Employee employee) {
-        return null;
+        return employee;
     }
 
 }
