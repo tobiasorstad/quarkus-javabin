@@ -1,7 +1,6 @@
 package org.example;
 
 import io.quarkus.security.ForbiddenException;
-import io.quarkus.security.User;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -16,6 +15,8 @@ public class EmployeeService {
     @RestClient
     EmployeeApi employeeApi;
 
+    @Inject
+    SecurityIdentity securityIdentity;
 
     public Optional<Employee> getEmployee(String employeeNumber) {
         try {
@@ -31,8 +32,12 @@ public class EmployeeService {
         }
     }
 
-    public boolean employeeIsValid(Employee employee) {
-        return EmployeeUtils.EmployeeIsValid(employee);
+    public Employee getEmployeeAuth(String id) {
+        if(UserAccess.IsAdmin(securityIdentity)){
+            return employeeApi.getEmployee(id);
+        }
+        else throw new ForbiddenException("You don't have access!");
+
     }
 
     public boolean isValidEmployee(Employee employee){
