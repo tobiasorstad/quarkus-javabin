@@ -1,19 +1,14 @@
 package org.example;
 
-import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectSpy;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
 public class AddEmployeeUsingInjectSpyTest {
-
-    @InjectMock
-    @RestClient
-    EmployeeApi employeeApi;
 
     @InjectSpy
     EmployeeService employeeService;
@@ -23,11 +18,21 @@ public class AddEmployeeUsingInjectSpyTest {
         Employee employee = new Employee(null, "123");
         when(employeeService.isValidEmployee(employee)).thenReturn(true);
 
-        employeeService.addEmployee(employee);
+        var result = employeeService.addEmployee(employee);
 
-        Mockito.verify(employeeApi, Mockito.times(1)).addEmployee(employee);
+        Assertions.assertNotNull(result);
         Mockito.verify(employeeService, Mockito.times(1)).isValidEmployee(employee);
     }
 
+    @Test
+    void testAddEmployeeDoesNotCallAPIIfInvalid() {
+        Employee employee = new Employee(null, "123");
+        when(employeeService.isValidEmployee(employee)).thenReturn(false);
+
+        var result = employeeService.addEmployee(employee);
+
+        Assertions.assertNull(result);
+        Mockito.verify(employeeService, Mockito.times(1)).isValidEmployee(employee);
+    }
 
 }

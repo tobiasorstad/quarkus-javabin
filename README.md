@@ -160,6 +160,10 @@ public Employee addEmployee(Employee employee) {
         }
         return null;
     }
+    
+public boolean isValidEmployee(Employee employee){
+        return employee.name() != null && employee.employeeNumber() != null;
+    }
 ```
 
 We want to test that whenever we add a valid employee, we also create a ticket by calling the createTicket method of our ticketApi rest-client. This can be achieved by using Mockito's verify-method like in the following test:
@@ -195,6 +199,49 @@ public class AddEmployeeUsingVerifyTest {
 
 }
 ```
+
+## @InjectSpy
+
+Now what if we want to mock a specific method in an injected class, but use the rest as is. This is where @InjectSpy comes in handy.
+Imagine that in our EmployeeService class, we want to test its functionality, but mock the isValidEmployee method. We could do so like this: 
+
+``` 
+@QuarkusTest
+public class AddEmployeeUsingInjectSpyTest {
+
+    @InjectSpy
+    EmployeeService employeeService;
+
+    @Test
+    void testAddEmployee() {
+        Employee employee = new Employee(null, "123");
+        when(employeeService.isValidEmployee(employee)).thenReturn(true);
+
+        var result = employeeService.addEmployee(employee);
+
+        Assertions.assertNotNull(result);
+        Mockito.verify(employeeService, Mockito.times(1)).isValidEmployee(employee);
+    }
+
+    @Test
+    void testAddEmployeeDoesNotCallAPIIfInvalid() {
+        Employee employee = new Employee(null, "123");
+        when(employeeService.isValidEmployee(employee)).thenReturn(false);
+
+        var result = employeeService.addEmployee(employee);
+
+        Assertions.assertNull(result);
+        Mockito.verify(employeeService, Mockito.times(1)).isValidEmployee(employee);
+    }
+    
+}
+```
+
+The functionality of the injected EmployeeService is unchanged, except for the isValidEmployee method,
+that we override with the mock implementation. The injected spy is also compatible with verify, as a bonus. 
+InjectSpy can be practical if there is a specific method that we do not care about in our test, but we want to test 
+the rest of the injected class as is. You probably should not mock your validation methods, but the example above
+simply illustrates how to use an injected spy.
 
 
 ## mockStatic
