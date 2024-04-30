@@ -12,4 +12,8 @@ public interface EmployeeApi {
     @Path("employee/{employeeNumber}")
     Employee getEmployee(@PathParam("employeeNumber") String employeeNumber);
 
+    @POST
+    @Path("employee")
+    void addEmployee(Employee employee);
+
 }

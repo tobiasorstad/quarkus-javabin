@@ -20,4 +20,14 @@ public class EmployeeService {
             return Optional.empty();
         }
     }
+
+    public void addEmployee(Employee employee) {
+        if(isValidEmployee(employee)){
+           employeeApi.addEmployee(employee);
+        }
+    }
+
+    private boolean isValidEmployee(Employee employee){
+        return employee.name() != null && employee.employeeNumber() != null;
+    }
 }
