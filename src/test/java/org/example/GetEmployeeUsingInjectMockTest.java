@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
-public class GetEmployeeTestUsingInjectMock {
+public class GetEmployeeUsingInjectMockTest {
 
     @InjectMock
     @RestClient

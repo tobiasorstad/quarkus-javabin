@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 
 @QuarkusTest
-class GetEmployeeTestUsingMockClass {
+class GetEmployeeUsingMockClassTest {
 
     @Inject
     EmployeeService employeeService;
