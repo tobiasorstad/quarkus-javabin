@@ -4,8 +4,6 @@ import jakarta.ws.rs.*;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @RegisterRestClient(configKey = "api")
-@Consumes("application/json")
-@Produces("application/json")
 public interface EmployeeApi {
 
     @GET
