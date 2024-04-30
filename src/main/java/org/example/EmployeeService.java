@@ -27,7 +27,7 @@ public class EmployeeService {
         }
     }
 
-    private boolean isValidEmployee(Employee employee){
+    public boolean isValidEmployee(Employee employee){
         return employee.name() != null && employee.employeeNumber() != null;
     }
 }
