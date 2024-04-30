@@ -13,6 +13,10 @@ import org.example.TicketApi;
 @RestClient
 public class TicketApiMock implements TicketApi {
 
+    /*
+        This class is included simply to make sure all the tests run.
+        It is never utilized in any test.
+     */
 
     @Override
     public void createTicket(Employee employee) {

@@ -247,24 +247,26 @@ simply illustrates how to use an injected spy.
 ## mockStatic
 
 Mockito also allows us to mock static methods. In the example repo we utilize a class with a static method to verify if a Quarkus security identity contains a specific role.
-This can be hard to test for, so it could be easier to mock this method. If we have defined our method like the following:
+This can be hard to test for, so it could be easier to mock this method. 
+If we extend the getEmployee method to also check the user's credential like this:
 
 ```
-public class EmployeeService {
-    public Employee getEmployeeAuth(String id) {
-        if(UserAccess.isAdmin(securityIdentity)){
-            return employeeApi.getEmployee(id);
-        }
-        else throw new ForbiddenException("You don't have access!");
+public Employee getEmployeeAuth(String id) {
+    if(UserAccess.isAdmin(securityIdentity)){
+        return employeeApi.getEmployee(id);
     }
+    else throw new ForbiddenException("You don't have access!");
 }
 ```
 
-With a simple static method looking like this:
+With the UserAccess class looking like this:
 ```
- public static boolean isAdmin(SecurityIdentity securityIdentity){
+public class UserAccess {
+
+    public static boolean isAdmin(SecurityIdentity securityIdentity){
         return securityIdentity.hasRole("EmployeeAdmin");
     }
+}
 ```
 
 We can mock the call to isAdmin with Mockito's mockStatic function, demonstrated in this test:
@@ -308,7 +310,8 @@ public class GetEmployeeUsingMockStaticTest {
 ```
 
 Notice how we set up the mocking of the employeeApi in the same way as before. Mockstatic introduces some more lines of code to your test, 
-so consider if what you are testing really needs to be static. Maybe the function could be refactored and tested in another way. In any case, mockStatic is there if there is a need to test static functionality.
+so consider if what you are testing really needs to be static. Maybe the function could be refactored and tested in another way. 
+In any case, mockStatic is there if there is a need to test static functionality.
 
 ## Conclusion
 
