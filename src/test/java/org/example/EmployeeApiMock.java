@@ -19,7 +19,8 @@ public class EmployeeApiMock implements EmployeeApi {
     }
 
     @Override
-    public void addEmployee(Employee employee) {
+    public Employee addEmployee(Employee employee) {
+        return null;
     }
 
 }

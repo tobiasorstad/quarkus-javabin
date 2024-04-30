@@ -16,7 +16,13 @@ public class EmployeeService {
     EmployeeApi employeeApi;
 
     @Inject
+    @RestClient
+    TicketApi ticketApi;
+
+    @Inject
     SecurityIdentity securityIdentity;
+
+
 
     public Optional<Employee> getEmployee(String employeeNumber) {
         try {
@@ -26,18 +32,19 @@ public class EmployeeService {
         }
     }
 
-    public void addEmployee(Employee employee) {
+    public Employee addEmployee(Employee employee) {
         if(isValidEmployee(employee)){
-           employeeApi.addEmployee(employee);
+            ticketApi.createTicket(employee);
+            return employeeApi.addEmployee(employee);
         }
+        return null;
     }
 
     public Employee getEmployeeAuth(String id) {
-        if(UserAccess.IsAdmin(securityIdentity)){
+        if(UserAccess.isAdmin(securityIdentity)){
             return employeeApi.getEmployee(id);
         }
         else throw new ForbiddenException("You don't have access!");
-
     }
 
     public boolean isValidEmployee(Employee employee){

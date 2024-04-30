@@ -12,6 +12,6 @@ public interface EmployeeApi {
 
     @POST
     @Path("employee")
-    void addEmployee(Employee employee);
+    Employee addEmployee(Employee employee);
 
 }

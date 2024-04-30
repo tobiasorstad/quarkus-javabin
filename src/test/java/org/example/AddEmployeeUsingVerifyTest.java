@@ -10,23 +10,31 @@ import org.mockito.Mockito;
 import static org.mockito.ArgumentMatchers.any;
 
 @QuarkusTest
-public class AddEmployeeUsingInjectMockTest {
+public class AddEmployeeUsingVerifyTest {
 
     @InjectMock
     @RestClient
-    EmployeeApi employeeApi;
+    TicketApi ticketApi;
 
     @Inject
     EmployeeService employeeService;
 
     @Test
-    void testAddEmployee() {
+    void testAddEmployeeCreatesTicket() {
         Employee employee = new Employee("Mr. Test", "123");
 
         employeeService.addEmployee(employee);
 
-        Mockito.verify(employeeApi, Mockito.times(1)).addEmployee(employee);
+        Mockito.verify(ticketApi, Mockito.times(1)).createTicket(employee);
     }
 
+    @Test
+    void testAddInvalidEmployeeDoesNotCreateTicket() {
+        Employee employee = new Employee(null, "123");
+
+        employeeService.addEmployee(employee);
+
+        Mockito.verify(ticketApi, Mockito.times(0)).createTicket(employee);
+    }
 
 }

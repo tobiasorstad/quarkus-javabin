@@ -16,7 +16,6 @@ import static org.mockito.Mockito.when;
 @QuarkusTest
 public class GetEmployeeUsingMockStaticTest {
 
-
     @Inject
     EmployeeService employeeService;
 
@@ -32,7 +31,7 @@ public class GetEmployeeUsingMockStaticTest {
     @Test
     void testGetEmployeeWhenAdmin(){
         try(var userAccessMock = Mockito.mockStatic(UserAccess.class)) {
-            userAccessMock.when(() -> UserAccess.IsAdmin(any())).thenReturn(true);
+            userAccessMock.when(() -> UserAccess.isAdmin(any())).thenReturn(true);
             var result = employeeService.getEmployeeAuth("1");
             Assertions.assertEquals("Test", result.name());
         }
@@ -41,7 +40,7 @@ public class GetEmployeeUsingMockStaticTest {
     @Test
     void testGetEmployeeWhenNotAdmin(){
         try(var userAccessMock = Mockito.mockStatic(UserAccess.class)) {
-            userAccessMock.when(() -> UserAccess.IsAdmin(any())).thenReturn(false);
+            userAccessMock.when(() -> UserAccess.isAdmin(any())).thenReturn(false);
             Assertions.assertThrows(ForbiddenException.class, () -> employeeService.getEmployeeAuth("1"));
         }
     }

@@ -97,7 +97,7 @@ class GetEmployeeUsingMockClassTest {
 ```
 
 
-## Using @InjectMock
+## @InjectMock
 
 Quarkus allows us to define the mock implementation per test. Instead of creating a separate mock implementation class, we define the mock inside the test class.
 We use argument matchers to define logic based on input parameters. Our mock class and test can both be replaced by the following test.
@@ -137,72 +137,130 @@ public class GetEmployeeUsingInjectMockTest {
 This setup provides the same result, but with the mock setup inside the test class itself. 
 A big benefit of this is that whoever reads the tests can easily see what data is mocked. Using argument matchers allows for customizing the mock based on the parameters. More information about the powers of argument matchers can be found here: https://www.baeldung.com/mockito-argument-matchers
 
-## Using verify to make sure a piece of code is run
+## Verify
 
-The above examples details how to use mockito to customize what your method returns based on the input, but what if you want to execute some different code entirely? Mockitos thenAnswer method comes to the rescue. Imagine your employeeService has a method for adding an employee, and you want to check that the employeeApi's postEmployee method is called with the same object that is passed to the employeeService bean. You could do something like this:
+Sometimes we might have piece of code that executes several other methods, like sending post requests to an API, without directly affecting the output of the method you are testing.
+Mockito's verify function comes to the rescue. A small note: When writing tests we usually want to try to not couple our tests to tightly to the internal logic of our system,
+because if we make a change to the internal logic, we end up breaking the tests, even if the system still does what we want it do. Verify takes us somewhat into this territory,
+so make sure to only use it when necessary.
 
-@Test
-void testAddEmployee() {
-List<Employee> postedEmployees = new ArrayList<>();
-when(employeeApi.postEmployee(any())).thenAnswer(
-invocation -> {
-postedEmployees.add(invocation.getArgument(0));
-return Response.OK();
-});
+For an example we imagine that when we create new employees in our system, we need to create tickets to notify IT or administrators that a new employee has started.
+This ticket is created through a post request to an external API. The EmployeeService would have a method like this:
 
-        Employee employee = new Employee("Mr. Test");
-
-        var result = employeeService.addEmployee(employee);
-
-	Assertions.assertEquals(200, result.status());
-	Assertions.assertEquals(1, postedEmployees.size());
-	Assertions.assertEquals("Mr. Test", postedEmployees.get(0).getName();
+```
+public Employee addEmployee(Employee employee) {
+        if(isValidEmployee(employee)){
+            ticketApi.createTicket(employee);
+            return employeeApi.addEmployee(employee);
+        }
+        return null;
     }
+```
 
-Here we use the thenAnswer method to fetch the arguments passed to postEmployee and define our own logic. We utilize a custom mock state to check that the object we pass to the employeeService is further passed along to the employeeApi.
+We want to test that whenever we add a valid employee, we also create a ticket by calling the createTicket method of our ticketApi rest-client. This can be achieved by using Mockito's verify-method like in the following test:
 
-mockStatic
+```
+@QuarkusTest
+public class AddEmployeeUsingVerifyTest {
 
-Mockito also allows us to mock static methods. An example of this is if you have a method checking the Quarkus security identity of a user to determine if a user is an administrator. This can be hard to test for, so it could be easier to mock this method. If we have defined our method like the following:
-
-public class EmployeeService {
+    @InjectMock
+    @RestClient
+    TicketApi ticketApi;
 
     @Inject
+    EmployeeService employeeService;
+
+    @Test
+    void testAddEmployeeCreatesTicket() {
+        Employee employee = new Employee("Mr. Test", "123");
+
+        employeeService.addEmployee(employee);
+
+        Mockito.verify(ticketApi, Mockito.times(1)).createTicket(employee);
+    }
+
+    @Test
+    void testAddInvalidEmployeeDoesNotCreateTicket() {
+        Employee employee = new Employee(null, "123");
+
+        employeeService.addEmployee(employee);
+
+        Mockito.verify(ticketApi, Mockito.times(0)).createTicket(employee);
+    }
+
+}
+```
+
+
+## mockStatic
+
+Mockito also allows us to mock static methods. In the example repo we utilize a class with a static method to verify if a Quarkus security identity contains a specific role.
+This can be hard to test for, so it could be easier to mock this method. If we have defined our method like the following:
+
+```
+public class EmployeeService {
+    public Employee getEmployeeAuth(String id) {
+        if(UserAccess.isAdmin(securityIdentity)){
+            return employeeApi.getEmployee(id);
+        }
+        else throw new ForbiddenException("You don't have access!");
+    }
+}
+```
+
+With a simple static method looking like this:
+```
+ public static boolean isAdmin(SecurityIdentity securityIdentity){
+        return securityIdentity.hasRole("EmployeeAdmin");
+    }
+```
+
+We can mock the call to isAdmin with Mockito's mockStatic function, demonstrated in this test:
+
+```
+@QuarkusTest
+public class GetEmployeeUsingMockStaticTest {
+
+
+    @Inject
+    EmployeeService employeeService;
+
+    @InjectMock
     @RestClient
     EmployeeApi employeeApi;
 
-    @Inject
-    SecurityIdentity securityIdentity;
+    @BeforeEach
+    public void setup(){
+        when(employeeApi.getEmployee(anyString())).thenAnswer(invocation -> new Employee("Test", invocation.getArgument(0)));
+    }
 
-    public Employee getEmployee() {
-	if(!UserAccess.isAdmin(securityIdentity)){
-	    throw new ForbiddenException("No Access");
-	}
-        try {
-            return employeeApi.getEmployee();
-        } catch (Exception e) {
-            return null;
+    @Test
+    void testGetEmployeeWhenAdmin(){
+        try(var userAccessMock = Mockito.mockStatic(UserAccess.class)) {
+            userAccessMock.when(() -> UserAccess.IsAdmin(any())).thenReturn(true);
+            var result = employeeService.getEmployeeAuth("1");
+            Assertions.assertEquals("Test", result.name());
         }
     }
+
+    @Test
+    void testGetEmployeeWhenNotAdmin(){
+        try(var userAccessMock = Mockito.mockStatic(UserAccess.class)) {
+            userAccessMock.when(() -> UserAccess.IsAdmin(any())).thenReturn(false);
+            Assertions.assertThrows(ForbiddenException.class, () -> employeeService.getEmployeeAuth("1"));
+        }
+    }
+
 }
 
-And the following tests:
+```
 
-@Test
-void testEmployeeIsFetchedWhileAdmin(){
-try(var userAccessMock = Mockito.mockStatic(UserAccess.class)) {
-userAccessMock.when(() -> UserAccess.isAdmin(any())).thenReturn(true);
-Assertions.assertEquals(null, employeeService.getEmployee("404"));
-}
-}
+Notice how we set up the mocking of the employeeApi in the same way as before. Mockstatic introduces some more lines of code to your test, 
+so consider if what you are testing really needs to be static. Maybe the function could be refactored and tested in another way. In any case, mockStatic is there if there is a need to test static functionality.
 
-@Test
-void testForbiddenWhenNotAdmin(){
-try(var userAccessMock = Mockito.mockStatic(UserAccess.class)) {
-userAccessMock.when(() -> UserAccess.isAdmin(any())).thenReturn(false);
-Assertions.assertThrows(ForbiddenException.class, () -> employeeService.getEmployee("404"));
-}
-}  	
+## Conclusion
 
+To wrap up, Mockito allows us to focus on system behaviour instead of dependencies. This tutorial has highlighted some Mockito's functionalities that allows for creating efficient test.
+Remember, the ultimate goal is a reliable codebase that's easy to update and maintain. Keep experimenting with Mockito and Quarkus to power up your tests. Happy testing!
 
 

@@ -4,7 +4,7 @@ import io.quarkus.security.identity.SecurityIdentity;
 
 public class UserAccess {
 
-    public static boolean IsAdmin(SecurityIdentity securityIdentity){
+    public static boolean isAdmin(SecurityIdentity securityIdentity){
         return securityIdentity.hasRole("EmployeeAdmin");
     }
 }
