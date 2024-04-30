@@ -1,5 +1,8 @@
 package org.example;
 
+import io.quarkus.security.ForbiddenException;
+import io.quarkus.security.User;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -12,6 +15,7 @@ public class EmployeeService {
     @Inject
     @RestClient
     EmployeeApi employeeApi;
+
 
     public Optional<Employee> getEmployee(String employeeNumber) {
         try {
@@ -27,7 +31,16 @@ public class EmployeeService {
         }
     }
 
+    public boolean employeeIsValid(Employee employee) {
+        return EmployeeUtils.EmployeeIsValid(employee);
+    }
+
     public boolean isValidEmployee(Employee employee){
         return employee.name() != null && employee.employeeNumber() != null;
     }
+
+
+
+
+
 }
