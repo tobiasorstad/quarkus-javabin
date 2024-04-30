@@ -4,6 +4,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
+import java.util.Optional;
+
 @ApplicationScoped
 public class EmployeeService {
 
@@ -11,11 +13,11 @@ public class EmployeeService {
     @RestClient
     EmployeeApi employeeApi;
 
-    public Employee getEmployee(String employeeNumber) {
+    public Optional<Employee> getEmployee(String employeeNumber) {
         try {
-            return employeeApi.getEmployee(employeeNumber);
+            return Optional.of(employeeApi.getEmployee(employeeNumber));
         } catch (Exception e) {
-            return null;
+            return Optional.empty();
         }
     }
 }
