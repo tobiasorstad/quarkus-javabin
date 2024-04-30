@@ -1,11 +1,11 @@
 # Utilizing the power of Mockito with Quarkus
 
-How often have you wanted to write an integration test for a piece of code that communicates with a lot of external factors?
+How often have you wanted to write an integration test for a piece of code that communicates with a lot of external parts?
 This is a case we as developers often face, and luckily there is a solution, mocking! Mockito is a tool that lets us mock parts of our code,
-and depending on what tests we are running we might want our mocks to behave differently. This tutorial will go through different approaches to mocking,
+and depending on what tests we are running we might want our mocks to behave differently. This tutorial will go through different approaches to mocking
 using Quarkus and Mockito, and talk about some pros and cons with each of them.
 
-This guide comes with an example repository, so feel free to clone it and check it out for yourself. Information about the needed dependencies can also be found there.
+Feel free to clone the example repository and check out the code for yourself. Information about the needed dependencies can also be found there.
 
 ## The Mock annotation
 
