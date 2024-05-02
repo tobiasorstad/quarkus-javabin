@@ -99,6 +99,11 @@ class GetEmployeeUsingMockClassTest {
 }
 ```
 
+On the other hand, if we always want the mock-implementation to behave the same way, or if we are testing some other part of the code
+not directly tied to the mock, a Mock-class is a simple way to remove the need for an external dependency. 
+Setting up a Mock-class requires few lines of code and can be a clean solution if the tests are not directly
+tied to the Mock-implementation itself, like the example above.
+
 
 ## @InjectMock
 
