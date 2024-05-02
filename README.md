@@ -6,6 +6,7 @@ and depending on what tests we are running we might want our mocks to behave dif
 using Quarkus and Mockito, and talk about some pros and cons with each of them.
 
 Feel free to clone the example repository and check out the code for yourself. Information about the needed dependencies can also be found there.
+Having cloned the repository all you need is Java and Maven installed to run the tests with "mvn verify".
 
 ## The Mock annotation
 
@@ -139,17 +140,18 @@ public class GetEmployeeUsingInjectMockTest {
 
 This setup provides the same result, but with the mock setup inside the test class itself. 
 A big benefit of this is that whoever reads the tests can easily see what data is mocked. 
-Using argument matchers allows for customizing the mock based on the parameters. 
+Argument matchers can be used to customize the mock response based on the parameters,
+like we do in the test above by returning an employee with the same employeeNumber used in the query.
 More information about the powers of argument matchers can be found here: https://www.baeldung.com/mockito-argument-matchers
 
 ## Verify
 
-Sometimes we might have piece of code that executes several other methods, like sending post requests to an API, without directly affecting the output of the method you are testing.
-Mockito's verify function comes to the rescue. A small note: When writing tests we usually want to try to not couple our tests to tightly to the internal logic of our system,
-because if we make a change to the internal logic, we end up breaking the tests, even if the system still does what we want it do. Verify takes us somewhat into this territory,
+Sometimes we might have a piece of code that executes several other methods, like sending post requests to an API, without directly affecting the output of the method you are testing.
+Mockito's verify function comes to the rescue. A small note: When writing tests we usually want to try to not couple our tests too tightly to the internal logic of our system.
+If we make a change to the internal logic, we end up breaking the tests, even if the system still does what we want it do. Verify takes us somewhat into this territory,
 so make sure to only use it when necessary.
 
-For an example we imagine that when we create new employees in our system, we need to create tickets to notify IT or administrators that a new employee has started.
+When we create new employees in our system, we need to create tickets to notify IT or administrators that a new employee has started.
 This ticket is created through a post request to an external API. The EmployeeService would have a method like this:
 
 ```
@@ -315,7 +317,7 @@ In any case, mockStatic is there if there is a need to test static functionality
 
 ## Conclusion
 
-To wrap up, Mockito allows us to focus on system behaviour instead of dependencies. This tutorial has highlighted some Mockito's functionalities that allows for creating efficient test.
+To wrap up, Mockito allows us to focus on system behaviour instead of dependencies. This tutorial has highlighted some of Mockito's functionalities that allows for creating efficient tests.
 Remember, the ultimate goal is a reliable codebase that's easy to update and maintain. Keep experimenting with Mockito and Quarkus to power up your tests. Happy testing!
 
 
