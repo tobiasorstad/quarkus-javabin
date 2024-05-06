@@ -1,9 +1,18 @@
 # Utilizing the power of Mockito with Quarkus
 
-How often have you wanted to write an integration test for a piece of code that communicates with a lot of external parts?
-This is a case we as developers often face, and luckily there is a solution, mocking! Mockito is a tool that lets us mock parts of our code,
-and depending on what tests we are running we might want our mocks to behave differently. This tutorial will go through different approaches to mocking
-using Quarkus and Mockito, and talk about some pros and cons with each of them.
+How often have you wanted to write an integration test for a piece of code that communicates with a lot of external parts, like APIs?
+This is a case we as developers often face and something we need to handle. When testing a piece of code that communicates with an API,
+we can connect to the actual API during the test, which makes your test vulnerable to downtime or changes in the API.
+You could also set up your own temporary API that exists solely for testing purposes. This is a viable solution, but takes some effort.
+A third solution, which is the topic of this blogpost, is mocking!
+
+When testing a piece of code we want to isolate its behaviour. To achieve this goal it can be helpful to replace other parts of our code with simulations of their behaviour. 
+We could then simulate a class responsible for sending a POST-request to an external API, instead of having to communicate with an actual API, which will be demonstrated.
+This way we are able to test the adjacent logic, like the code verifying that the data about to be sent is valid.
+
+Depending on what tests we are running we might want our mocks to behave differently. This tutorial will go through some different approaches to mocking
+using Quarkus and Mockito, and talk about some pros and cons with each of them. This tutorial is primarily aimed at developers who are familiar with writing tests in Java, but are new to mocking. 
+Experience with Quarkus is helpful.
 
 Feel free to clone the example repository and check out the code for yourself. Information about the needed dependencies can also be found there.
 Having cloned the repository all you need is Java and Maven installed to run the tests with "mvn verify".
