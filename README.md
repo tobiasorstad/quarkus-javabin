@@ -7,7 +7,7 @@ You could also set up your own temporary API that exists solely for testing purp
 A third solution, which is the topic of this blogpost, is mocking!
 
 When testing a piece of code we want to isolate its behaviour. To achieve this goal it can be helpful to replace other parts of our code with simulations of their behaviour. 
-We could then simulate a class responsible for sending a POST-request to an external API, instead of having to communicate with an actual API, which will be demonstrated.
+We could then simulate a class responsible for sending a POST-request to an external API, instead of having to communicate with an actual API.
 This way we are able to test the adjacent logic, like the code verifying that the data about to be sent is valid.
 
 Depending on what tests we are running we might want our mocks to behave differently. This tutorial will go through some different approaches to mocking
