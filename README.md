@@ -14,8 +14,10 @@ Depending on what tests we are running we might want our mocks to behave differe
 using Quarkus and Mockito, and talk about some pros and cons with each of them. This tutorial is primarily aimed at developers who are familiar with writing tests in Java, but are new to mocking. 
 Experience with Quarkus is helpful.
 
-Feel free to clone the example repository and check out the code for yourself. Information about the needed dependencies can also be found there.
+The tests will focus on testing an EmployeeService class, testing its functionality while trying to work around its dependencies to the injected
+REST-clients. Feel free to clone the example repository and check out the code for yourself. Information about the needed dependencies can also be found there.
 Having cloned the repository all you need is Java and Maven installed to run the tests with "mvn verify".
+
 
 ## The Mock annotation
 
@@ -59,7 +61,7 @@ public class EmployeeApiMock implements EmployeeApi {
 }
 ```
 
-Note that when using the mock annotation, your mock implementation wil override the rest client in all the tests, unless they specifically inject their own mocked version.
+When using the mock annotation, your mock implementation wil override the rest client in all the tests, unless they specifically inject their own mocked version.
 If you want your mock to behave differently based on its input parameters, you would have to implement logic for that in the mock, which provides more complexity to the test,
 and most importantly that logic affects your test, but is not located in the test itself, making it harder for someone reading your test to understand what is going on.
 
@@ -95,7 +97,7 @@ class GetEmployeeUsingMockClassTest {
     EmployeeService employeeService;
 
     @Test
-    void testThat404GivesNull(){
+    void testThatNotFoundExceptionGivesEmptyResponse(){
         var result = employeeService.getEmployee("404");
         Assertions.assertFalse(result.isPresent());
     }
@@ -108,10 +110,12 @@ class GetEmployeeUsingMockClassTest {
 }
 ```
 
-On the other hand, if we always want the mock-implementation to behave the same way, or if we are testing some other part of the code
-not directly tied to the mock, a Mock-class is a simple way to remove the need for an external dependency. 
-Setting up a Mock-class requires few lines of code and can be a clean solution if the tests are not directly
-tied to the Mock-implementation itself, like the example above.
+On the other hand, if we want the mock-implementation to behave the same way globally across all of our tests 
+a Mock-class (also called a fake) is a simple way to remove the need for an external dependency.
+Setting up a Mock-class can require few lines of code and can be a clean solution if the tests are not directly
+tied to the Mock-implementation itself, like the example above. If we however want a more complex Mock, it could become
+a little more bothersome to write an implementation that serves the need of all of our tests. In these cases it could be easier 
+to set up a specific Mock for a single test, which leads into the next subject.
 
 
 ## @InjectMock

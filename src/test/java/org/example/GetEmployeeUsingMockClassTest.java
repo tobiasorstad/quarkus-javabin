@@ -13,7 +13,7 @@ class GetEmployeeUsingMockClassTest {
     EmployeeService employeeService;
 
     @Test
-    void testThat404GivesNull(){
+    void testThatNotFoundExceptionGivesEmptyResponse(){
         var result = employeeService.getEmployee("404");
         Assertions.assertFalse(result.isPresent());
     }

@@ -34,8 +34,9 @@ public class EmployeeService {
 
     public Employee addEmployee(Employee employee) {
         if(isValidEmployee(employee)){
+            var createdEmployee = employeeApi.addEmployee(employee);
             ticketApi.createTicket(employee);
-            return employeeApi.addEmployee(employee);
+            return createdEmployee;
         }
         return null;
     }
