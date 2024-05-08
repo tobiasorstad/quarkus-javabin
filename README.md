@@ -11,8 +11,8 @@ We could then simulate a class responsible for sending a POST-request to an exte
 This way we are able to test the adjacent logic, like the code verifying that the data about to be sent is valid.
 
 Depending on what tests we are running we might want our mocks to behave differently. This tutorial will go through some different approaches to mocking
-using Quarkus and Mockito, and talk about some pros and cons with each of them. This tutorial is primarily aimed at developers who are familiar with writing tests in Java, but are new to mocking. 
-Experience with Quarkus is helpful.
+using Quarkus and Mockito, and talk about some pros and cons with each of them. This tutorial is primarily aimed at developers who
+are familiar with writing tests in Java with Quarkus, but are new to mocking.
 
 The tests will focus on testing an EmployeeService class, testing its functionality while trying to work around its dependencies to the injected
 REST-clients. Feel free to clone the example repository and check out the code for yourself. Information about the needed dependencies can also be found there.
