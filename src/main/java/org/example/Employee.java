@@ -1,4 +1,8 @@
 package org.example;
 
-public record Employee (String name, String employeeNumber){
+public class Employee{
+
+    String name;
+    String employeeNumber;
+    String dateCreated;
 }

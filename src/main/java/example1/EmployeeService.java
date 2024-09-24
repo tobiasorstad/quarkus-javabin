@@ -1,10 +1,12 @@
-package org.example;
+package example1;
 
 import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.example.TicketApi;
+import org.example.UserAccess;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -15,14 +17,6 @@ public class EmployeeService {
     @Inject
     @RestClient
     EmployeeApi employeeApi;
-
-    @Inject
-    @RestClient
-    TicketApi ticketApi;
-
-    @Inject
-    SecurityIdentity securityIdentity;
-
 
 
     public Optional<Employee> getEmployee(String employeeNumber) {
@@ -37,20 +31,5 @@ public class EmployeeService {
         employee.dateCreated = LocalDate.now().toString();
         return employeeApi.addEmployee(employee);
     }
-
-    public Employee getEmployeeAuth(String id) {
-        if(UserAccess.isAdmin(securityIdentity)){
-            return employeeApi.getEmployee(id);
-        }
-        else throw new ForbiddenException("You don't have access!");
-    }
-
-    public boolean isValidEmployee(Employee employee){
-        return employee.name != null && employee.employeeNumber != null;
-    }
-
-
-
-
 
 }
