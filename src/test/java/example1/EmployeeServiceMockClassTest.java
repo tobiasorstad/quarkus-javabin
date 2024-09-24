@@ -29,8 +29,7 @@ class EmployeeServiceMockClassTest {
 
     @Test
     void testAddEmployeeDateIsAdded(){
-        var result = employeeService.getEmployee("1");
-        Assertions.assertTrue(result.isPresent());
-        Assertions.assertEquals(LocalDate.now().toString(), result.get().dateCreated);
+        var result = employeeService.addEmployee(new Employee("test", "1"));
+        Assertions.assertEquals(LocalDate.now().toString(), result.dateCreated);
     }
 }

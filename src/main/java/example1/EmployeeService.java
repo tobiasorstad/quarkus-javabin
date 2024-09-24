@@ -1,12 +1,8 @@
 package example1;
 
-import io.quarkus.security.ForbiddenException;
-import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.example.TicketApi;
-import org.example.UserAccess;
 
 import java.time.LocalDate;
 import java.util.Optional;

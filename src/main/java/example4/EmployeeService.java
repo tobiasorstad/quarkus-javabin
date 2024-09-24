@@ -1,4 +1,4 @@
-package org.example;
+package example4;
 
 import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -17,26 +17,7 @@ public class EmployeeService {
     EmployeeApi employeeApi;
 
     @Inject
-    @RestClient
-    TicketApi ticketApi;
-
-    @Inject
     SecurityIdentity securityIdentity;
-
-
-
-    public Optional<Employee> getEmployee(String employeeNumber) {
-        try {
-            return Optional.of(employeeApi.getEmployee(employeeNumber));
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-    }
-
-    public Employee addEmployee(Employee employee) {
-        employee.dateCreated = LocalDate.now().toString();
-        return employeeApi.addEmployee(employee);
-    }
 
     public Employee getEmployeeAuth(String id) {
         if(UserAccess.isAdmin(securityIdentity)){
@@ -44,13 +25,5 @@ public class EmployeeService {
         }
         else throw new ForbiddenException("You don't have access!");
     }
-
-    public boolean isValidEmployee(Employee employee){
-        return employee.name != null && employee.employeeNumber != null;
-    }
-
-
-
-
 
 }

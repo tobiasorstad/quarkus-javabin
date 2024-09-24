@@ -26,13 +26,4 @@ public class FailingTest {
         Mockito.verify(ticketApi, Mockito.times(1)).createTicket(employee);
     }
 
-    @Test
-    void testAddInvalidEmployeeDoesNotCreateTicket() {
-        Employee employee = new Employee(null, "123");
-
-        employeeService.addEmployee(employee);
-
-        Mockito.verify(ticketApi, Mockito.times(0)).createTicket(employee);
-    }
-
 }

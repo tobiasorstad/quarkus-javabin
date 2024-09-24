@@ -1,4 +1,4 @@
-package org.example;
+package example5;
 
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -9,6 +9,6 @@ public interface TicketApi {
 
     @POST
     @Path("ticket")
-    void createTicket(Employee employee);
+    Ticket createTicket(Employee employee);
 
 }

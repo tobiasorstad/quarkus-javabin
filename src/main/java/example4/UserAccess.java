@@ -1,4 +1,4 @@
-package org.example;
+package example4;
 
 import io.quarkus.security.identity.SecurityIdentity;
 

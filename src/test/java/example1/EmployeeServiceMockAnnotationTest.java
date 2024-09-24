@@ -4,11 +4,13 @@ import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
@@ -16,6 +18,7 @@ import static org.mockito.Mockito.when;
 class EmployeeServiceMockAnnotationTest {
 
     @InjectMock
+    @RestClient
     EmployeeApi employeeApi;
 
     @Inject
@@ -38,6 +41,7 @@ class EmployeeServiceMockAnnotationTest {
 
     @Test
     void testAddEmployeeDateIsAdded(){
+        when(employeeApi.addEmployee(any())).thenAnswer(invocation -> invocation.getArgument(0));
         var result = employeeService.addEmployee(new Employee("Test", "1"));
         Assertions.assertEquals(LocalDate.now().toString(), result.dateCreated);
     }
