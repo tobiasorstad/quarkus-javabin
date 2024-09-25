@@ -1,5 +1,8 @@
-package example5;
+package example4;
 
+import common.Employee;
+import common.Ticket;
+import common.TicketApi;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -13,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class ArgumentCaptorTest {
+public class Case6ArgumentCaptorTest {
 
     @InjectMock
     @RestClient
@@ -32,7 +35,6 @@ public class ArgumentCaptorTest {
 
         Mockito.verify(ticketApi, Mockito.times(1)).createTicket(argumentCaptor.capture());
         Assertions.assertEquals("Test", argumentCaptor.getValue().name);
-
     }
 
 

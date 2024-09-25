@@ -1,4 +1,4 @@
-package example5;
+package common;
 
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;

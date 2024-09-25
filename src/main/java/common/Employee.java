@@ -1,10 +1,10 @@
-package example3;
+package common;
 
-class Employee{
+public class Employee{
 
-    String name;
-    String employeeNumber;
-    String dateCreated;
+    public String name;
+    public String employeeNumber;
+    public String dateCreated;
 
     public Employee(String name, String employeeNumber, String dateCreated){
         this.name = name;

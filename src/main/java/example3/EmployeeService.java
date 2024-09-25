@@ -1,11 +1,14 @@
 package example3;
 
+import common.Employee;
+import common.EmployeeApi;
+import common.Ticket;
+import common.TicketApi;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.BadRequestException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
-
-import java.util.Optional;
 
 @ApplicationScoped
 public class EmployeeService {
@@ -27,7 +30,7 @@ public class EmployeeService {
             logger.info("Ticket created with id " + ticket.id());
             return employeeApi.addEmployee(employee);
         }
-        return null;
+        throw new BadRequestException();
     }
 
     public boolean isValidEmployee(Employee employee){

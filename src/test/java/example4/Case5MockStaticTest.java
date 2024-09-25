@@ -1,5 +1,7 @@
 package example4;
 
+import common.Employee;
+import common.EmployeeApi;
 import io.quarkus.security.ForbiddenException;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -15,7 +17,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class MockStaticAndInvocationsTest {
+public class Case5MockStaticTest {
 
     @Inject
     EmployeeService employeeService;

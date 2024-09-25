@@ -1,5 +1,6 @@
-package example3;
+package common;
 
+import common.Ticket;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -7,11 +8,10 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 @Mock
 @ApplicationScoped
 @RestClient
-public class EmployeeApiFake implements EmployeeApi {
+public class TicketApiFake implements TicketApi {
 
     @Override
-    public Employee addEmployee(Employee employee) {
-        return employee;
+    public Ticket createTicket(Employee employee) {
+        return new Ticket("1");
     }
-
 }

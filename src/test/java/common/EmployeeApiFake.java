@@ -1,4 +1,4 @@
-package example1;
+package common;
 
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.ApplicationScoped;

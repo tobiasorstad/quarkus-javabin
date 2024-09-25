@@ -1,9 +1,9 @@
 package example3;
 
-import io.quarkus.test.InjectMock;
+import common.Employee;
+import common.TicketApi;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectSpy;
-import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -12,7 +12,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class InjectSpyTest {
+public class Case4InjectSpyTest {
 
     @InjectSpy
     @RestClient

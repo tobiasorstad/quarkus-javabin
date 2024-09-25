@@ -1,5 +1,7 @@
 package example3;
 
+import common.Employee;
+import common.TicketApi;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -8,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 @QuarkusTest
-public class FailingTest {
+public class Case4FailingTest {
 
     @InjectMock
     @RestClient

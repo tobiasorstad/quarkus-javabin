@@ -1,5 +1,7 @@
 package example1;
 
+import common.Employee;
+import common.EmployeeApi;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;

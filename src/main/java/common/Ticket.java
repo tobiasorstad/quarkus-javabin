@@ -1,4 +1,4 @@
-package example5;
+package common;
 
 public record Ticket(String id) {
 }
