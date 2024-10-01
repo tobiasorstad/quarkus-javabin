@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class Case5MockStaticTest {
+public class Case6MockStaticTest {
 
     @Inject
     EmployeeService employeeService;
@@ -35,7 +35,7 @@ public class Case5MockStaticTest {
     void testGetEmployeeWhenAdmin(){
         try(var userAccessMock = Mockito.mockStatic(UserAccess.class)) {
             userAccessMock.when(() -> UserAccess.isAdmin(any())).thenReturn(true);
-            var result = employeeService.getEmployeeAuth("1");
+            Employee result = employeeService.getEmployeeAuth("1");
             Assertions.assertEquals("1", result.employeeNumber);
         }
     }

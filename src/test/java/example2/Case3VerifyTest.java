@@ -32,21 +32,21 @@ public class Case3VerifyTest {
         @Test
         void testAddEmployeeCreatesTicket() {
             when(employeeApi.addEmployee(any())).thenAnswer(invocation -> invocation.getArgument(0));
-            Employee employee = new Employee("Mr. Test", "123");
+            Employee validEmployee = new Employee("Mr. Test", "123");
 
-            employeeService.addEmployee(employee);
+            employeeService.addEmployee(validEmployee);
 
-            Mockito.verify(ticketApi, Mockito.times(1)).createTicket(employee);
+            Mockito.verify(ticketApi, Mockito.times(1)).createTicket(validEmployee);
         }
 
         @Test
         void testAddInvalidEmployeeDoesNotCreateTicket() {
             when(employeeApi.addEmployee(any())).thenAnswer(invocation -> invocation.getArgument(0));
-            Employee employee = new Employee(null, "123");
+            Employee invalidEmployee = new Employee(null, "123");
 
-            Assertions.assertThrows(BadRequestException.class, () ->employeeService.addEmployee(employee));
+            Assertions.assertThrows(BadRequestException.class, () ->employeeService.addEmployee(invalidEmployee));
 
-            Mockito.verify(ticketApi, Mockito.never()).createTicket(employee);
+            Mockito.verify(ticketApi, Mockito.never()).createTicket(invalidEmployee);
         }
 
 

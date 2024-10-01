@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 
 @QuarkusTest
@@ -17,20 +18,23 @@ class Case1MockClassTest {
 
     @Test
     void testThatNotFoundExceptionGivesEmptyResponse(){
-        var result = employeeService.getEmployee("404");
-        Assertions.assertFalse(result.isPresent());
+        Optional<Employee> result = employeeService.getEmployee("404");
+
+        Assertions.assertTrue(result.isEmpty());
     }
 
     @Test
     void testThatEmployeeIsReturned(){
-        var result = employeeService.getEmployee("1");
+        Optional<Employee> result = employeeService.getEmployee("1");
+
         Assertions.assertTrue(result.isPresent());
         Assertions.assertEquals("Test", result.get().name);
     }
 
     @Test
     void testAddEmployeeDateIsAdded(){
-        var result = employeeService.addEmployee(new Employee("test", "1"));
+        Employee result = employeeService.addEmployee(new Employee("test", "1"));
+
         Assertions.assertEquals(LocalDate.now().toString(), result.dateCreated);
     }
 }

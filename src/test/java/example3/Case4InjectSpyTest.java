@@ -4,7 +4,9 @@ import common.Employee;
 import common.TicketApi;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectSpy;
+import jakarta.ws.rs.BadRequestException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -30,13 +32,14 @@ public class Case4InjectSpyTest {
         Mockito.verify(ticketApi, Mockito.times(1)).createTicket(employee);
     }
 
+    // uendret fra forrige eksempel
     @Test
     void testAddInvalidEmployeeDoesNotCreateTicket() {
-        Employee employee = new Employee(null, "123");
+        Employee invalidEmployee = new Employee(null, "123");
 
-        employeeService.addEmployee(employee);
+        Assertions.assertThrows(BadRequestException.class, () ->employeeService.addEmployee(invalidEmployee));
 
-        Mockito.verify(ticketApi, Mockito.times(0)).createTicket(employee);
+        Mockito.verify(ticketApi, Mockito.times(0)).createTicket(invalidEmployee);
     }
 
     @Test

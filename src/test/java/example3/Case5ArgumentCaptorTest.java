@@ -1,4 +1,4 @@
-package example4;
+package example3;
 
 import common.Employee;
 import common.Ticket;
@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class Case6ArgumentCaptorTest {
+public class Case5ArgumentCaptorTest {
 
     @InjectMock
     @RestClient
